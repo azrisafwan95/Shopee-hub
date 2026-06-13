@@ -15,7 +15,6 @@
         .sidebar-visible { transform: translateX(0); }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        /* Style untuk slider gambar */
         .snap-x { scroll-snap-type: x mandatory; scroll-behavior: smooth; }
         .snap-center { scroll-snap-align: center; }
     </style>
@@ -27,7 +26,7 @@
   <!-- Sidebar Menu (Drawer) -->
   <div id="sidebar-overlay" onclick="toggleSidebar()" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[100]"></div>
   <div id="sidebar" class="sidebar-hidden fixed top-0 left-0 bottom-0 w-64 bg-white z-[101] shadow-2xl p-6">
-    <div class="flex justify-between items-center mb-8 text-left">
+    <div class="flex justify-between items-center mb-8">
       <h2 class="font-black text-xl text-orange-600 italic uppercase">Kategori</h2>
       <button onclick="toggleSidebar()" class="text-gray-400 text-3xl">&times;</button>
     </div>
@@ -35,16 +34,16 @@
   </div>
 
   <!-- Header -->
-  <header class="bg-white sticky top-0 z-50 px-5 py-4 border-b border-gray-100 shadow-sm">
-    <div class="flex justify-between items-center mb-4 text-center">
+  <header class="bg-white sticky top-0 z-50 px-5 py-4 border-b border-gray-100 shadow-sm text-center">
+    <div class="flex justify-between items-center mb-4">
       <button onclick="toggleSidebar()" class="text-gray-700 p-1">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
       <div>
-        <h1 class="text-xl font-black text-orange-600 italic tracking-tighter uppercase leading-none text-center">My Shopee Hub</h1>
-        <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-1 text-center">Premium Affiliate Hub</p>
+        <h1 class="text-xl font-black text-orange-600 italic tracking-tighter uppercase leading-none">My Shopee Hub</h1>
+        <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-1">Premium Affiliate Hub</p>
       </div>
       <button onclick="toggleAdmin()" class="bg-orange-50 p-2 rounded-xl text-orange-600">⚙️</button>
     </div>
@@ -56,24 +55,24 @@
   </header>
 
   <!-- Admin Panel -->
-  <div id="admin-panel" class="hidden absolute top-20 inset-x-4 z-[60] p-6 bg-white rounded-3xl shadow-2xl border border-orange-100 ring-8 ring-black ring-opacity-5 text-left">
+  <div id="admin-panel" class="hidden absolute top-20 inset-x-4 z-[60] p-6 bg-white rounded-3xl shadow-2xl border border-orange-100 ring-8 ring-black ring-opacity-5 text-left text-sm">
     <h2 class="font-black text-lg mb-4 italic uppercase text-gray-800">Tambah Produk</h2>
     <div class="space-y-3">
-      <input id="admin-pass" type="password" placeholder="Password Admin" class="w-full p-3 border rounded-xl text-sm bg-gray-50 outline-none">
-      <input id="p-name" type="text" placeholder="Nama Produk" class="w-full p-3 border rounded-xl text-sm outline-none">
+      <input id="admin-pass" type="password" placeholder="Password Admin" class="w-full p-3 border rounded-xl bg-gray-50 outline-none">
+      <input id="p-name" type="text" placeholder="Nama Produk" class="w-full p-3 border rounded-xl outline-none">
       
       <div class="grid grid-cols-2 gap-2">
-        <input id="p-price" type="number" step="0.01" placeholder="Harga Jual" class="p-3 border rounded-xl text-sm outline-none">
-        <input id="p-original-price" type="number" step="0.01" placeholder="Harga Asal" class="p-3 border rounded-xl text-sm outline-none">
+        <input id="p-price" type="number" step="0.01" placeholder="Harga Jual" class="p-3 border rounded-xl outline-none">
+        <input id="p-original-price" type="number" step="0.01" placeholder="Harga Asal" class="p-3 border rounded-xl outline-none">
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 text-sm">
+        <input id="p-sold" type="number" placeholder="Terjual (Unit)" class="p-3 border rounded-xl outline-none">
+        <input id="p-category" type="text" placeholder="Kategori Baru" class="p-3 border rounded-xl outline-none uppercase font-bold">
       </div>
 
       <div class="grid grid-cols-2 gap-2">
-        <input id="p-sold" type="number" placeholder="Terjual" class="p-3 border rounded-xl text-sm outline-none">
-        <input id="p-category" type="text" placeholder="Kategori" class="p-3 border rounded-xl text-sm outline-none uppercase font-bold">
-      </div>
-
-      <div class="grid grid-cols-2 gap-2">
-        <select id="p-rating" class="p-3 border rounded-xl text-sm outline-none bg-white font-sans">
+        <select id="p-rating" class="p-3 border rounded-xl outline-none bg-white">
           <option value="5">⭐⭐⭐⭐⭐</option>
           <option value="4">⭐⭐⭐⭐</option>
         </select>
@@ -83,8 +82,9 @@
         </div>
       </div>
 
-      <input id="p-review" type="text" placeholder="Review Ringkas (Paling Racun)" class="w-full p-3 border rounded-xl text-sm italic">
-      <input id="p-link" type="text" placeholder="Link Affiliate Shopee" class="w-full p-3 border rounded-xl text-sm outline-none border-orange-200">
+      <input id="p-review" type="text" placeholder="Review Ringkas (Paling Racun)" class="w-full p-3 border rounded-xl italic outline-none">
+      <input id="p-link" type="text" placeholder="Link Affiliate Produk" class="w-full p-3 border rounded-xl outline-none border-orange-200">
+      <input id="p-shop-link" type="text" placeholder="Link Affiliate Store (Opsional)" class="w-full p-3 border rounded-xl outline-none border-gray-200">
       
       <button onclick="saveProduct()" id="btn-save" class="w-full shopee-gradient text-white font-black py-4 rounded-2xl shadow-lg uppercase tracking-widest active:scale-95 transition-all mt-2">Publish Sekarang</button>
     </div>
@@ -92,11 +92,12 @@
 
   <!-- Product List -->
   <div class="p-4 grid grid-cols-2 gap-4" id="product-list">
-    <p class="col-span-2 text-center text-gray-400 py-20 text-xs">Memuatkan barang...</p>
+    <p class="col-span-2 text-center text-gray-400 py-20 text-xs">Memuatkan barang racun...</p>
   </div>
 </div>
 
 <script>
+// --- CONFIG SUPABASE ---
 const SUPABASE_URL = 'https://wzjucotepgqhcmgidgda.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_1zE-aPwB_AHU7hU_yaUI9Q_zWplLCSL';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -107,10 +108,7 @@ let currentCategory = 'Semua';
 
 async function loadProducts() {
   const { data, error } = await _supabase.from('products').select('*').order('id', { ascending: false });
-  if (error) {
-    console.error(error);
-    return;
-  }
+  if (error) { console.error(error); return; }
   allProducts = data;
   generateSidebarCategories();
   filterProducts();
@@ -166,7 +164,7 @@ function filterProducts() {
     const deleteBtn = isAdminOpen ? `<button onclick="deleteProduct(${p.id})" class="absolute top-2 right-2 bg-red-600 text-white w-7 h-7 rounded-full text-[10px] z-30 font-bold shadow-lg flex items-center justify-center italic">X</button>` : '';
 
     // Slider Logic
-    const imgList = p.images && p.images.length > 0 ? p.images : [p.image_url];
+    const imgList = (p.images && p.images.length > 0) ? p.images : [p.image_url];
     const imageSlider = `
       <div class="relative w-full h-44 overflow-hidden">
         <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar w-full h-full bg-gray-50">
@@ -177,7 +175,7 @@ function filterProducts() {
     `;
 
     container.innerHTML += `
-      <div class="relative bg-white rounded-3xl border border-gray-100 shadow-sm flex flex-col overflow-hidden transition-all active:scale-95 italic">
+      <div class="relative bg-white rounded-3xl border border-gray-100 shadow-sm flex flex-col overflow-hidden transition-all active:scale-95 italic font-serif">
         ${deleteBtn}
         ${discount > 0 ? `<div class="absolute top-3 left-3 bg-red-500 text-white text-[9px] font-black px-2 py-1 rounded-lg z-20 shadow-sm not-italic font-sans animate-pulse">-${discount}%</div>` : ''}
         
@@ -198,7 +196,14 @@ function filterProducts() {
               <p class="text-[9px] text-orange-800 leading-relaxed italic font-medium font-sans">" ${p.review_text} "</p>
             </div>
           ` : ''}
-          <a href="${p.affiliate_url}" target="_blank" class="block w-full shopee-gradient text-white text-[10px] font-black py-3 rounded-2xl text-center uppercase tracking-tighter not-italic font-sans shadow-md shadow-orange-100 mt-auto">BELI SEKARANG</a>
+          
+          <div class="space-y-2 mt-auto">
+            <a href="${p.affiliate_url}" target="_blank" class="block w-full shopee-gradient text-white text-[10px] font-black py-3 rounded-xl text-center uppercase tracking-tighter not-italic font-sans shadow-md shadow-orange-100">BELI SEKARANG</a>
+            
+            ${p.shop_url ? `
+              <a href="${p.shop_url}" target="_blank" class="block w-full bg-gray-100 text-gray-500 text-[10px] font-bold py-2 rounded-xl text-center uppercase tracking-tighter not-italic font-sans hover:bg-gray-200">Lihat Store</a>
+            ` : ''}
+          </div>
         </div>
       </div>`;
   });
@@ -212,9 +217,9 @@ async function saveProduct() {
   const btn = document.getElementById('btn-save');
 
   if (pass !== ADMIN_PASSWORD) return alert("Password Salah!");
-  if (!name || !price || fileInput.files.length === 0) return alert("Info produk atau gambar tidak lengkap!");
+  if (!name || !price || fileInput.files.length === 0) return alert("Sila isi Nama, Harga, dan Pilih Gambar!");
 
-  btn.innerText = "⏳ Sedang Memproses...";
+  btn.innerText = "⏳ Memproses...";
   btn.disabled = true;
 
   try {
@@ -239,9 +244,10 @@ async function saveProduct() {
       category: document.getElementById('p-category').value || 'Lain-lain',
       rating: parseInt(document.getElementById('p-rating').value),
       review_text: document.getElementById('p-review').value,
-      image_url: uploadedUrls[0], // Cover utama
-      images: uploadedUrls, // Array semua gambar
-      affiliate_url: document.getElementById('p-link').value 
+      image_url: uploadedUrls[0],
+      images: uploadedUrls,
+      affiliate_url: document.getElementById('p-link').value,
+      shop_url: document.getElementById('p-shop-link').value
     }]);
 
     if (insertError) throw insertError;
@@ -257,8 +263,8 @@ async function saveProduct() {
 }
 
 async function deleteProduct(id) {
-  const pass = document.getElementById('admin-pass').value;
-  if (pass !== ADMIN_PASSWORD) return alert("Sila masukkan password admin!");
+  const p = document.getElementById('admin-pass').value;
+  if (p !== ADMIN_PASSWORD) return alert("Sila isi password admin!");
   if (confirm("Betul ke nak padam?")) {
     await _supabase.from('products').delete().eq('id', id);
     loadProducts();
@@ -270,7 +276,6 @@ function toggleAdmin() {
   filterProducts();
 }
 
-// Initial Load
 loadProducts();
 </script>
 </body>
