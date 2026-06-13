@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Shopeehub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  </head>
+    
+  <body>
+  <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+
+<style>
+  body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+  .shopee-gradient { background: linear-gradient(135deg, #f53d2d 0%, #ff6433 100%); }
+  /* Animasi Sidebar */
+  #sidebar { transition: transform 0.3s ease-in-out; }
+  .sidebar-hidden { transform: translateX(-100%); }
+  .sidebar-visible { transform: translateX(0); }
+</style>
+
+<div id="app" class="max-w-lg mx-auto min-h-screen pb-24 shadow-2xl bg-white relative overflow-hidden">
+  
+  <!-- Sidebar Menu (Drawer) -->
+  <div id="sidebar-overlay" onclick="toggleSidebar()" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[100] transition-opacity"></div>
+  
+  <div id="sidebar" class="sidebar-hidden fixed top-0 left-0 bottom-0 w-64 bg-white z-[101] shadow-2xl p-6">
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="font-black text-xl text-orange-600 italic">KATEGORI</h2>
+      <button onclick="toggleSidebar()" class="text-gray-400 text-2xl">&times;</button>
+    </div>
+    <div id="category-list" class="flex flex-col gap-4">
+      <!-- Kategori akan muncul di sini secara dinamik -->
+    </div>
+  </div>
+
+  <!-- Premium Header -->
+  <header class="bg-white sticky top-0 z-50 px-5 py-4 border-b border-gray-100 shadow-sm">
+    <div class="flex justify-between items-center mb-4">
+      <!-- Hamburger Menu Icon -->
+      <button onclick="toggleSidebar()" class="text-gray-700 p-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+      <div class="text-center">
+        <h1 class="text-xl font-black text-orange-600 italic tracking-tighter leading-none">MY SHOPEE HUB</h1>
+        <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-1">Premium Katalog</p>
+      </div>
+
+      <button onclick="toggleAdmin()" class="bg-orange-50 p-2 rounded-xl text-orange-600">⚙️</button>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="relative">
+      <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="Cari barang racun..." 
+             class="w-full bg-gray-100 border-none rounded-2xl py-3 px-11 text-sm outline-none focus:ring-2 focus:ring-orange-500 transition-all">
+      <span class="absolute left-4 top-3.5 opacity-30 text-sm">🔍</span>
+    </div>
+    
+    <!-- Tunjuk kategori yang sedang dipilih -->
+    <div id="active-cat-label" class="mt-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Kategori: Semua</div>
+  </header>
+
+  <!-- Admin Panel -->
+  <div id="admin-panel" class="hidden absolute top-20 inset-x-4 z-[60] p-6 bg-white rounded-3xl shadow-2xl border border-orange-100 ring-8 ring-black ring-opacity-5">
+    <h2 class="font-black text-lg mb-4 text-gray-800 italic uppercase">Tambah Barang</h2>
+    <div class="space-y-3">
+      <input id="admin-pass" type="password" placeholder="Password Admin" class="w-full p-3 border rounded-xl text-sm bg-gray-50 outline-none">
+      <input id="p-name" type="text" placeholder="Nama Produk" class="w-full p-3 border rounded-xl text-sm outline-none">
+      
+      <div class="grid grid-cols-2 gap-2">
+        <input id="p-price" type="number" step="0.01" placeholder="Harga Jual" class="p-3 border rounded-xl text-sm outline-none">
+        <input id="p-original-price" type="number" step="0.01" placeholder="Harga Asal" class="p-3 border rounded-xl text-sm outline-none">
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 text-sm">
+        <input id="p-sold" type="number" placeholder="Terjual (Unit)" class="p-3 border rounded-xl outline-none">
+        <input id="p-category" type="text" placeholder="Kategori Baru" class="p-3 border rounded-xl outline-none uppercase">
+      </div>
+
+      <div class="grid grid-cols-2 gap-2">
+        <select id="p-rating" class="p-3 border rounded-xl text-sm outline-none bg-white font-sans">
+          <option value="5">⭐⭐⭐⭐⭐</option>
+          <option value="4">⭐⭐⭐⭐</option>
+        </select>
+        <div class="p-2 border rounded-xl">
+           <input id="p-image-file" type="file" accept="image/*" class="text-[9px] w-full mt-1">
+        </div>
+      </div>
+
+      <input id="p-review" type="text" placeholder="Review Ringkas" class="w-full p-3 border rounded-xl text-sm italic">
+      <input id="p-link" type="text" placeholder="Link Affiliate Shopee" class="w-full p-3 border rounded-xl text-sm outline-none">
+      
+      <button onclick="saveProduct()" id="btn-save" class="w-full shopee-gradient text-white font-black py-4 rounded-2xl shadow-lg uppercase tracking-widest active:scale-95 transition-all mt-2">Publish</button>
+    </div>
+  </div>
+
+  <!-- Product List -->
+  <div class="p-4 grid grid-cols-2 gap-4" id="product-list">
+    <!-- Items go here -->
+  </div>
+</div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/4.1.13/lib.min.js'></script><script  src="./script.js"></script>
+
+  </body>
+  
+</html>
