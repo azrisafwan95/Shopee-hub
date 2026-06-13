@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Shopee Hub - Pro Katalog</title>
+    <title>My Shopee Hub - Pro Affiliate</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
@@ -22,10 +22,10 @@
 
 <div id="app" class="max-w-lg mx-auto min-h-screen pb-24 shadow-2xl bg-white relative overflow-hidden">
   
-  <!-- Sidebar Menu -->
+  <!-- Sidebar Menu (Drawer) -->
   <div id="sidebar-overlay" onclick="toggleSidebar()" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[100]"></div>
   <div id="sidebar" class="sidebar-hidden fixed top-0 left-0 bottom-0 w-64 bg-white z-[101] shadow-2xl p-6 text-left">
-    <h2 class="font-black text-xl text-orange-600 mb-8 italic">KATEGORI</h2>
+    <h2 class="font-black text-xl text-orange-600 mb-8 italic uppercase tracking-tighter">Kategori</h2>
     <div id="category-list" class="flex flex-col gap-3"></div>
   </div>
 
@@ -35,44 +35,76 @@
       <button onclick="toggleSidebar()" class="text-gray-700">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
       </button>
-      <h1 class="text-xl font-black text-orange-600 italic uppercase">My Shopee Hub</h1>
-      <button onclick="toggleAdmin()" class="bg-orange-50 p-2 rounded-xl text-orange-600">⚙️</button>
+      <div>
+        <h1 class="text-xl font-black text-orange-600 italic tracking-tighter uppercase leading-none">My Shopee Hub</h1>
+        <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mt-1">Premium Affiliate Hub</p>
+      </div>
+      <button onclick="toggleAdmin()" class="bg-orange-50 p-2 rounded-xl text-orange-600 active:scale-90 transition-all">⚙️</button>
     </div>
-    <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="Cari barang..." class="w-full bg-gray-100 rounded-2xl py-3 px-11 text-sm outline-none focus:ring-2 focus:ring-orange-500 transition-all">
-    <div id="active-cat-label" class="mt-2 text-[10px] font-bold text-gray-400 uppercase text-left">Kategori: Semua</div>
+    <div class="relative">
+      <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="Cari barang racun..." class="w-full bg-gray-100 border-none rounded-2xl py-3 px-11 text-sm outline-none focus:ring-2 focus:ring-orange-500 transition-all">
+      <span class="absolute left-4 top-3.5 opacity-30 text-sm">🔍</span>
+    </div>
+    <div id="active-cat-label" class="mt-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-left px-1">Kategori: Semua</div>
   </header>
 
   <!-- Admin Panel -->
-  <div id="admin-panel" class="hidden absolute top-20 inset-x-4 z-[60] p-6 bg-white rounded-3xl shadow-2xl border border-orange-100 ring-8 ring-black ring-opacity-5 text-left text-sm">
-    <h2 id="admin-title" class="font-black text-lg mb-4 italic uppercase">Tambah Produk</h2>
+  <div id="admin-panel" class="hidden m-4 p-6 bg-white rounded-3xl shadow-2xl border border-orange-100 ring-8 ring-black ring-opacity-5 text-left text-sm relative z-[60]">
+    <h2 id="admin-title" class="font-black text-lg mb-4 italic uppercase text-gray-800 tracking-tight">Tambah Produk</h2>
     <div class="space-y-3">
-      <input id="admin-pass" type="password" placeholder="Password Admin" class="w-full p-3 border rounded-xl bg-gray-50 outline-none">
+      <input id="admin-pass" type="password" placeholder="Password Admin" class="w-full p-3 border rounded-xl bg-gray-50 outline-none focus:ring-2 focus:ring-orange-500">
       <input id="p-name" type="text" placeholder="Nama Produk" class="w-full p-3 border rounded-xl outline-none">
-      <div class="grid grid-cols-2 gap-2">
-        <input id="p-price" type="number" step="0.01" placeholder="Harga Jual" class="p-3 border rounded-xl outline-none">
-        <input id="p-original-price" type="number" step="0.01" placeholder="Harga Asal" class="p-3 border rounded-xl outline-none">
-      </div>
-      <div class="grid grid-cols-2 gap-2">
-        <input id="p-sold" type="number" placeholder="Terjual" class="p-3 border rounded-xl outline-none">
-        <input id="p-category" type="text" placeholder="Kategori" class="p-3 border rounded-xl outline-none uppercase font-bold text-orange-600">
-      </div>
-      <div class="grid grid-cols-2 gap-2">
-        <select id="p-rating" class="p-3 border rounded-xl bg-white"><option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option></select>
-        <div class="p-1 border rounded-xl"><input id="p-image-file" type="file" multiple class="text-[9px] w-full mt-1"></div>
-      </div>
-      <input id="p-review" type="text" placeholder="Review Ringkas" class="w-full p-3 border rounded-xl italic">
-      <input id="p-link" type="text" placeholder="Link Affiliate Produk" class="w-full p-3 border rounded-xl">
-      <input id="p-shop-link" type="text" placeholder="Link Affiliate Store" class="w-full p-3 border rounded-xl">
       
-      <button onclick="saveProduct()" id="btn-save" class="w-full shopee-gradient text-white font-black py-4 rounded-2xl shadow-lg uppercase tracking-widest active:scale-95 transition-all">Publish Barang</button>
-      <button onclick="resetAdminForm()" id="btn-cancel" class="hidden w-full bg-gray-200 text-gray-500 font-bold py-2 rounded-xl mt-2">Batal Edit</button>
+      <div class="grid grid-cols-2 gap-2 text-xs">
+        <div>
+           <label class="font-bold text-gray-400">HARGA JUAL</label>
+           <input id="p-price" type="number" step="0.01" placeholder="RM 0.00" class="w-full p-3 border rounded-xl outline-none">
+        </div>
+        <div>
+           <label class="font-bold text-gray-400">HARGA ASAL</label>
+           <input id="p-original-price" type="number" step="0.01" placeholder="RM 0.00" class="w-full p-3 border rounded-xl outline-none">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 text-xs">
+        <div>
+           <label class="font-bold text-gray-400">TERJUAL</label>
+           <input id="p-sold" type="number" placeholder="Unit" class="w-full p-3 border rounded-xl outline-none">
+        </div>
+        <div>
+           <label class="font-bold text-gray-400">KATEGORI</label>
+           <input id="p-category" type="text" placeholder="Gajet / Deko" class="w-full p-3 border rounded-xl outline-none uppercase font-bold text-orange-600">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2">
+        <select id="p-rating" class="p-3 border rounded-xl outline-none bg-white">
+          <option value="5">⭐⭐⭐⭐⭐</option>
+          <option value="4">⭐⭐⭐⭐</option>
+        </select>
+        <div class="p-1 border rounded-xl overflow-hidden">
+           <label class="text-[8px] font-bold text-gray-400 uppercase ml-1">Gambar (Multiple)</label>
+           <input id="p-image-file" type="file" accept="image/*" multiple class="text-[9px] w-full mt-1">
+        </div>
+      </div>
+
+      <input id="p-review" type="text" placeholder="Review Ringkas (Testimoni)" class="w-full p-3 border rounded-xl italic outline-none">
+      <input id="p-link" type="text" placeholder="Link Affiliate Produk" class="w-full p-3 border rounded-xl border-orange-200">
+      <input id="p-shop-link" type="text" placeholder="Link Affiliate Store" class="w-full p-3 border rounded-xl border-gray-200">
+      
+      <button onclick="saveProduct()" id="btn-save" class="w-full shopee-gradient text-white font-black py-4 rounded-2xl shadow-lg uppercase tracking-widest active:scale-95 transition-all mt-2">Publish Barang</button>
+      <button onclick="resetAdminForm()" id="btn-cancel" class="hidden w-full bg-gray-200 text-gray-500 font-bold py-2 rounded-xl mt-2 uppercase text-xs">Batal Edit</button>
     </div>
   </div>
 
-  <div class="p-4 grid grid-cols-2 gap-4" id="product-list"></div>
+  <!-- Product List -->
+  <div class="p-4 grid grid-cols-2 gap-4" id="product-list">
+    <p class="col-span-2 text-center text-gray-400 py-20 text-xs italic">Memuatkan barang racun...</p>
+  </div>
 </div>
 
 <script>
+// --- CONFIG SUPABASE ---
 const SUPABASE_URL = 'https://wzjucotepgqhcmgidgda.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_1zE-aPwB_AHU7hU_yaUI9Q_zWplLCSL';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -80,28 +112,60 @@ const ADMIN_PASSWORD = "123";
 
 let allProducts = [];
 let currentCategory = 'Semua';
-let editingId = null; // Track if we are editing
+let editingId = null;
 
 async function loadProducts() {
   const { data, error } = await _supabase.from('products').select('*').order('id', { ascending: false });
-  if (!error) { allProducts = data; generateSidebarCategories(); filterProducts(); }
+  if (error) return console.error(error);
+  allProducts = data;
+  generateSidebarCategories();
+  filterProducts();
 }
 
+// SIDEBAR & CATEGORY LOGIC
+function toggleSidebar() {
+  const s = document.getElementById('sidebar');
+  const o = document.getElementById('sidebar-overlay');
+  s.classList.toggle('sidebar-hidden');
+  s.classList.toggle('sidebar-visible');
+  o.classList.toggle('hidden');
+}
+
+function generateSidebarCategories() {
+  const list = document.getElementById('category-list');
+  const cats = ['Semua', ...new Set(allProducts.map(p => p.category).filter(c => c))];
+  list.innerHTML = '';
+  cats.forEach(cat => {
+    const active = currentCategory === cat;
+    list.innerHTML += `<button onclick="setCategory('${cat}')" class="text-left py-3.5 px-5 rounded-2xl text-xs font-bold transition-all uppercase tracking-wider ${active ? 'bg-orange-600 text-white shadow-lg' : 'bg-gray-50 text-gray-500'}">${cat}</button>`;
+  });
+}
+
+function setCategory(cat) {
+  currentCategory = cat;
+  document.getElementById('active-cat-label').innerText = "Kategori: " + cat;
+  if (!document.getElementById('sidebar').classList.contains('sidebar-hidden')) toggleSidebar();
+  filterProducts();
+  generateSidebarCategories();
+}
+
+// FILTER & DISPLAY
 function filterProducts() {
   const term = document.getElementById('search-input').value.toLowerCase();
   const container = document.getElementById('product-list');
-  const isAdmin = !document.getElementById('admin-panel').classList.contains('hidden');
+  const isAdminOpen = !document.getElementById('admin-panel').classList.contains('hidden');
+
   let filtered = allProducts.filter(p => p.name.toLowerCase().includes(term) && (currentCategory === 'Semua' || p.category === currentCategory));
-  
   container.innerHTML = '';
+
   filtered.forEach(p => {
     const disc = p.original_price ? Math.round(((p.original_price - p.price) / p.original_price) * 100) : 0;
     
-    // Admin Controls (Edit & Delete)
-    const controls = isAdmin ? `
+    // ADMIN BUTTONS (EDIT & DELETE)
+    const adminBtns = isAdminOpen ? `
       <div class="absolute top-2 right-2 flex gap-1 z-30">
-        <button onclick="prepareEdit(${p.id})" class="bg-blue-600 text-white w-7 h-7 rounded-full text-[10px] font-bold shadow-lg flex items-center justify-center italic">E</button>
-        <button onclick="deleteProduct(${p.id})" class="bg-red-600 text-white w-7 h-7 rounded-full text-[10px] font-bold shadow-lg flex items-center justify-center italic">X</button>
+        <button onclick="prepareEdit(${p.id})" class="bg-blue-600 text-white w-7 h-7 rounded-full text-[10px] font-bold shadow-lg flex items-center justify-center">E</button>
+        <button onclick="deleteProduct(${p.id})" class="bg-red-600 text-white w-7 h-7 rounded-full text-[10px] font-bold shadow-lg flex items-center justify-center">X</button>
       </div>` : '';
 
     const imgList = (p.images && p.images.length > 0) ? p.images : [p.image_url];
@@ -110,21 +174,24 @@ function filterProducts() {
         <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar w-full h-full bg-gray-50">
           ${imgList.map(img => `<img src="${img}" class="w-full h-44 object-cover flex-shrink-0 snap-center" onerror="this.src='https://via.placeholder.com/300'">`).join('')}
         </div>
-        ${imgList.length > 1 ? `<div class="absolute bottom-2 right-2 bg-black/50 text-white text-[8px] font-bold px-2 py-0.5 rounded-full z-10 backdrop-blur-sm">↔ SWIPE</div>` : ''}
+        ${imgList.length > 1 ? `<div class="absolute bottom-2 right-2 bg-black/50 text-white text-[8px] font-bold px-2 py-0.5 rounded-full z-10">↔ SWIPE</div>` : ''}
       </div>`;
 
     container.innerHTML += `
-      <div class="relative bg-white rounded-3xl border border-gray-100 shadow-sm flex flex-col overflow-hidden transition-all active:scale-95 italic text-left">
-        ${controls}
-        ${disc > 0 ? `<div class="absolute top-3 left-3 bg-red-500 text-white text-[9px] font-black px-2 py-1 rounded-lg z-20 animate-pulse">-${disc}%</div>` : ''}
+      <div class="relative bg-white rounded-3xl border border-gray-100 shadow-sm flex flex-col overflow-hidden transition-all italic text-left">
+        ${adminBtns}
+        ${disc > 0 ? `<div class="absolute top-3 left-3 bg-red-500 text-white text-[9px] font-black px-2 py-1 rounded-lg z-20">-${disc}%</div>` : ''}
         ${slider}
         <div class="p-4 flex flex-col flex-grow">
           <h2 class="text-[12px] font-bold text-gray-800 line-clamp-2 mb-1 h-8 font-sans not-italic leading-tight">${p.name}</h2>
           <div class="flex items-center gap-1 mb-2 font-sans not-italic text-[9px] font-bold text-gray-400">⭐ ${p.rating}.0 | Terjual ${p.sold_count}</div>
-          <div class="mb-3 font-sans not-italic">${p.original_price ? `<p class="text-[10px] text-gray-400 line-through decoration-red-300 italic">RM${p.original_price.toFixed(2)}</p>` : ''}<p class="text-orange-600 font-black text-lg italic leading-tight">RM${p.price.toFixed(2)}</p></div>
+          <div class="mb-3 font-sans not-italic">
+            ${p.original_price ? `<p class="text-[10px] text-gray-400 line-through decoration-red-300 italic">RM${p.original_price.toFixed(2)}</p>` : ''}
+            <p class="text-orange-600 font-black text-lg italic leading-tight">RM${p.price.toFixed(2)}</p>
+          </div>
           ${p.review_text ? `<div class="bg-orange-50 p-2.5 rounded-2xl mb-4 border border-orange-100 text-[9px] text-orange-800 italic font-medium font-sans leading-tight">" ${p.review_text} "</div>` : ''}
           <div class="space-y-2 mt-auto">
-            <a href="${p.affiliate_url}" target="_blank" class="block w-full shopee-gradient text-white text-[10px] font-black py-3 rounded-xl text-center uppercase shadow-md shadow-orange-100 not-italic font-sans">BELI SEKARANG</a>
+            <a href="${p.affiliate_url}" target="_blank" class="block w-full shopee-gradient text-white text-[10px] font-black py-3 rounded-xl text-center uppercase shadow-md not-italic font-sans">BELI SEKARANG</a>
             ${p.shop_url ? `<a href="${p.shop_url}" target="_blank" class="block w-full bg-gray-100 text-gray-500 text-[10px] font-bold py-2 rounded-xl text-center uppercase not-italic font-sans">Lihat Store</a>` : ''}
           </div>
         </div>
@@ -132,11 +199,17 @@ function filterProducts() {
   });
 }
 
-// FUNGSI EDIT: Masukkan data ke form
+// ADMIN FUNCTIONS (CREATE, EDIT, DELETE)
+function toggleAdmin() {
+  const panel = document.getElementById('admin-panel');
+  panel.classList.toggle('hidden');
+  if (panel.classList.contains('hidden')) resetAdminForm();
+  filterProducts(); // REFRESH UI UNTUK TUNJUK BUTANG E/X
+}
+
 function prepareEdit(id) {
   const p = allProducts.find(item => item.id === id);
   if (!p) return;
-
   editingId = id;
   document.getElementById('admin-title').innerText = "Edit Produk";
   document.getElementById('btn-save').innerText = "Update Produk";
@@ -151,7 +224,6 @@ function prepareEdit(id) {
   document.getElementById('p-review').value = p.review_text;
   document.getElementById('p-link').value = p.affiliate_url;
   document.getElementById('p-shop-link').value = p.shop_url || '';
-  
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -160,42 +232,34 @@ function resetAdminForm() {
   document.getElementById('admin-title').innerText = "Tambah Produk";
   document.getElementById('btn-save').innerText = "Publish Barang";
   document.getElementById('btn-cancel').classList.add('hidden');
-  document.getElementById('p-name').value = '';
-  document.getElementById('p-price').value = '';
-  document.getElementById('p-original-price').value = '';
-  document.getElementById('p-sold').value = '';
-  document.getElementById('p-category').value = '';
-  document.getElementById('p-review').value = '';
-  document.getElementById('p-link').value = '';
-  document.getElementById('p-shop-link').value = '';
+  ['p-name','p-price','p-original-price','p-sold','p-category','p-review','p-link','p-shop-link','p-image-file'].forEach(id => {
+    document.getElementById(id).value = "";
+  });
 }
 
 async function saveProduct() {
   const pass = document.getElementById('admin-pass').value;
-  if (pass !== ADMIN_PASSWORD) return alert("Password Salah!");
+  if (pass !== ADMIN_PASSWORD) return alert("Password Admin Salah!");
 
   const btn = document.getElementById('btn-save');
   const fileInput = document.getElementById('p-image-file');
-  
-  btn.innerText = "⏳ Sedang Proses...";
+  btn.innerText = "⏳ Memproses...";
   btn.disabled = true;
 
   try {
     let finalImageUrl = "";
     let finalImagesArray = [];
 
-    // Jika ada upload gambar baru
     if (fileInput.files.length > 0) {
       const files = Array.from(fileInput.files);
       for (const file of files) {
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${file.name.split('.').pop()}`;
         await _supabase.storage.from('product-image').upload(fileName, file);
-        const { data: urlData } = _supabase.storage.from('product-image').getPublicUrl(fileName);
-        finalImagesArray.push(urlData.publicUrl);
+        const { data } = _supabase.storage.from('product-image').getPublicUrl(fileName);
+        finalImagesArray.push(data.publicUrl);
       }
       finalImageUrl = finalImagesArray[0];
     } else if (editingId) {
-      // Jika edit tapi tak upload gambar baru, guna gambar lama
       const p = allProducts.find(item => item.id === editingId);
       finalImageUrl = p.image_url;
       finalImagesArray = p.images;
@@ -216,49 +280,31 @@ async function saveProduct() {
     };
 
     if (editingId) {
-      const { error } = await _supabase.from('products').update(payload).eq('id', editingId);
-      if (error) throw error;
+      await _supabase.from('products').update(payload).eq('id', editingId);
       alert("✅ Berjaya Di-Update!");
     } else {
       if (!finalImageUrl) throw new Error("Sila pilih gambar!");
-      const { error } = await _supabase.from('products').insert([payload]);
-      if (error) throw error;
+      await _supabase.from('products').insert([payload]);
       alert("✅ Berjaya Di-Publish!");
     }
-    
     resetAdminForm();
     loadProducts();
+    toggleAdmin();
   } catch (err) { alert(err.message); }
-  finally { btn.innerText = editingId ? "Update Produk" : "Publish Barang"; btn.disabled = false; }
+  finally { btn.innerText = "Publish Barang"; btn.disabled = false; }
 }
 
 async function deleteProduct(id) {
   const pass = document.getElementById('admin-pass').value;
-  if (pass !== ADMIN_PASSWORD) return alert("Sila masukkan password admin!");
-  if (confirm("Padam barang ni?")) {
+  if (pass !== ADMIN_PASSWORD) return alert("Masukkan password admin dulu!");
+  if (confirm("Betul ke nak padam barang ni?")) {
     const { error } = await _supabase.from('products').delete().eq('id', id);
-    if (!error) loadProducts();
+    if (!error) { alert("Padam berjaya!"); loadProducts(); }
+    else { alert("Gagal padam: " + error.message); }
   }
 }
 
-function toggleAdmin() { document.getElementById('admin-panel').classList.toggle('hidden'); filterProducts(); }
-function toggleSidebar() { 
-  const s = document.getElementById('sidebar'); 
-  const o = document.getElementById('sidebar-overlay');
-  if (s.classList.contains('sidebar-hidden')) { s.classList.replace('sidebar-hidden', 'sidebar-visible'); o.classList.remove('hidden'); }
-  else { s.classList.replace('sidebar-visible', 'sidebar-hidden'); o.classList.add('hidden'); }
-}
-function generateSidebarCategories() {
-  const list = document.getElementById('category-list');
-  const cats = ['Semua', ...new Set(allProducts.map(p => p.category).filter(c => c))];
-  list.innerHTML = '';
-  cats.forEach(c => {
-    const active = currentCategory === c;
-    list.innerHTML += `<button onclick="setCategory('${c}')" class="text-left py-3 px-5 rounded-2xl text-xs font-bold ${active ? 'bg-orange-600 text-white' : 'bg-gray-50 text-gray-500'} uppercase">${c}</button>`;
-  });
-}
-function setCategory(c) { currentCategory = c; document.getElementById('active-cat-label').innerText = "Kategori: " + c; toggleSidebar(); generateSidebarCategories(); filterProducts(); }
-
+// RUN
 loadProducts();
 </script>
 </body>
