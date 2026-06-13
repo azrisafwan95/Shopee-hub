@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Shopee Hub - Premium Catalog</title>
+    
+    <!-- PRIMARY META TAGS (OG TAGS) -->
+    <title>My Shopee Hub - Katalog Barang Viral</title>
+    <meta name="title" content="My Shopee Hub - Katalog Barang Viral">
+    <meta name="description" content="Koleksi barangan Shopee paling berbaloi, estetik dan berkualiti yang telah kami tapis untuk anda.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://shopee-hub.netlify.app/">
+    <meta property="og:title" content="My Shopee Hub - Katalog Barang Viral">
+    <meta property="og:description" content="Dapatkan barang viral Shopee dengan harga paling rendah di sini!">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1557821552-17105176677c?q=80&w=1000&auto=format&fit=crop">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
         .shopee-gradient { background: linear-gradient(135deg, #f53d2d 0%, #ff6433 100%); }
@@ -16,50 +27,49 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .snap-x { scroll-snap-type: x mandatory; scroll-behavior: smooth; }
         .snap-center { scroll-snap-align: center; }
-        /* Landing Page Animation */
-        #landing-page { transition: opacity 0.5s ease-out; }
+        
+        /* Skeleton Shimmer Animation */
+        .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
     </style>
 </head>
 <body>
 
-<!-- 1. LANDING PAGE (WELCOME SCREEN) -->
-<div id="landing-page" class="fixed inset-0 z-[200] shopee-gradient flex flex-col items-center justify-center text-white px-8 text-center">
-    <h1 class="text-4xl font-black italic tracking-tighter mb-2 italic">MY SHOPEE HUB</h1>
-    <p class="text-sm opacity-90 mb-10 font-medium tracking-wide">Pusat Katalog Barangan Viral & Berkualiti Shopee</p>
+<!-- 1. LANDING PAGE -->
+<div id="landing-page" class="fixed inset-0 z-[200] shopee-gradient flex flex-col items-center justify-center text-white px-8 text-center transition-opacity duration-500">
+    <h1 class="text-4xl font-black italic tracking-tighter mb-2">MY SHOPEE HUB</h1>
+    <p class="text-sm opacity-90 mb-10 font-medium">Pusat Katalog Barangan Viral & Berkualiti Shopee</p>
     
-    <div class="space-y-4 w-full max-w-xs text-center">
+    <div class="space-y-4 w-full max-w-xs">
         <button onclick="enterApp('ms')" class="w-full bg-white text-orange-600 font-black py-4 rounded-2xl shadow-xl active:scale-95 transition-all uppercase tracking-widest">Bahasa Melayu</button>
         <button onclick="enterApp('en')" class="w-full bg-white/20 backdrop-blur-md text-white border-2 border-white/30 font-black py-4 rounded-2xl shadow-xl active:scale-95 transition-all uppercase tracking-widest">English</button>
     </div>
 
-    <!-- Hidden Admin Login -->
-    <div class="mt-12 w-full max-w-xs">
-        <input id="landing-admin-pass" type="password" placeholder="Admin Access" class="w-full bg-black/10 border border-white/20 rounded-xl p-3 text-center text-xs outline-none placeholder:text-white/50">
-        <button onclick="loginAdmin()" class="mt-2 text-[10px] uppercase font-bold opacity-50 hover:opacity-100 tracking-widest">Login as Admin</button>
+    <div class="mt-12 w-full max-w-xs opacity-40 focus-within:opacity-100 transition-opacity">
+        <input id="landing-admin-pass" type="password" placeholder="Admin Access" class="w-full bg-black/10 border border-white/20 rounded-xl p-3 text-center text-xs outline-none placeholder:text-white/30">
+        <button onclick="loginAdmin()" class="mt-2 text-[10px] uppercase font-bold tracking-widest">Login as Admin</button>
     </div>
 </div>
 
-<!-- 2. MAIN APP CONTENT (HIDDEN BY DEFAULT) -->
+<!-- 2. MAIN APP -->
 <div id="main-app" class="hidden max-w-lg mx-auto min-h-screen pb-24 shadow-2xl bg-white relative overflow-hidden">
   
-  <!-- Sidebar Menu (Drawer) -->
   <div id="sidebar-overlay" onclick="toggleSidebar()" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[100]"></div>
   <div id="sidebar" class="sidebar-hidden fixed top-0 left-0 bottom-0 w-64 bg-white z-[101] shadow-2xl p-6 text-left">
     <h2 id="lang-cat-title" class="font-black text-xl text-orange-600 mb-8 italic uppercase">Kategori</h2>
     <div id="category-list" class="flex flex-col gap-3"></div>
   </div>
 
-  <!-- Header -->
   <header class="bg-white sticky top-0 z-50 px-5 py-4 border-b border-gray-100 shadow-sm text-center">
     <div class="flex justify-between items-center mb-4">
-      <button onclick="toggleSidebar()" class="text-gray-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
-      </button>
-      <h1 class="text-xl font-black text-orange-600 italic tracking-tighter uppercase leading-none">My Shopee Hub</h1>
-      <!-- Gear only visible if isAdmin is true -->
+      <button onclick="toggleSidebar()" class="text-gray-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg></button>
+      <h1 onclick="window.location.href='/'" class="text-xl font-black text-orange-600 italic tracking-tighter uppercase cursor-pointer">My Shopee Hub</h1>
       <button id="admin-gear" onclick="toggleAdminPanel()" class="hidden bg-orange-50 p-2 rounded-xl text-orange-600">⚙️</button>
     </div>
-    <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="Cari barang..." class="w-full bg-gray-100 rounded-2xl py-3 px-11 text-sm outline-none focus:ring-2 focus:ring-orange-500">
+    <div class="relative">
+        <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="Cari..." class="w-full bg-gray-100 border-none rounded-2xl py-3 px-11 text-sm outline-none focus:ring-2 focus:ring-orange-500">
+        <span class="absolute left-4 top-3.5 opacity-30">🔍</span>
+    </div>
     <div id="active-cat-label" class="mt-2 text-[10px] font-bold text-gray-400 uppercase text-left">Kategori: Semua</div>
   </header>
 
@@ -74,26 +84,31 @@
       </div>
       <div class="grid grid-cols-2 gap-2 text-xs">
         <input id="p-sold" type="number" placeholder="Terjual" class="p-3 border rounded-xl">
-        <input id="p-category" type="text" placeholder="Kategori" class="p-3 border rounded-xl uppercase font-bold">
+        <input id="p-category" type="text" placeholder="Kategori" class="p-3 border rounded-xl uppercase font-bold text-orange-600">
       </div>
       <div class="grid grid-cols-2 gap-2">
         <select id="p-rating" class="p-3 border rounded-xl bg-white"><option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option></select>
-        <div class="p-1 border rounded-xl overflow-hidden"><input id="p-image-file" type="file" multiple class="text-[9px] w-full mt-1"></div>
+        <div class="p-1 border rounded-xl overflow-hidden text-[9px]"><input id="p-image-file" type="file" multiple class="w-full"></div>
       </div>
       <input id="p-review" type="text" placeholder="Review Ringkas" class="w-full p-3 border rounded-xl italic">
       <input id="p-link" type="text" placeholder="Link Produk" class="w-full p-3 border rounded-xl border-orange-200">
-      <input id="p-shop-link" type="text" placeholder="Link Store" class="w-full p-3 border rounded-xl border-gray-200">
-      <button onclick="saveProduct()" id="btn-save" class="w-full shopee-gradient text-white font-black py-4 rounded-2xl shadow-lg uppercase">Publish Barang</button>
-      <button onclick="resetAdminForm()" id="btn-cancel" class="hidden w-full bg-gray-200 text-gray-500 font-bold py-2 rounded-xl mt-2 uppercase text-[10px]">Batal Edit</button>
+      <input id="p-shop-link" type="text" placeholder="Link Store" class="w-full p-3 border rounded-xl">
+      <button onclick="saveProduct()" id="btn-save" class="w-full shopee-gradient text-white font-black py-4 rounded-2xl shadow-lg uppercase tracking-widest active:scale-95 transition-all">Publish</button>
+      <button onclick="resetAdminForm()" id="btn-cancel" class="hidden w-full bg-gray-200 text-gray-500 font-bold py-2 rounded-xl mt-2 text-[10px]">BATAL EDIT</button>
     </div>
   </div>
 
-  <!-- Product List -->
-  <div class="p-4 grid grid-cols-2 gap-4" id="product-list"></div>
+  <!-- Product List & Skeleton -->
+  <div class="p-4 grid grid-cols-2 gap-4" id="product-list">
+    <!-- Skeleton Loading Boxes -->
+    <div class="bg-gray-50 rounded-3xl h-64 skeleton animate-pulse"></div>
+    <div class="bg-gray-50 rounded-3xl h-64 skeleton animate-pulse"></div>
+    <div class="bg-gray-50 rounded-3xl h-64 skeleton animate-pulse"></div>
+    <div class="bg-gray-50 rounded-3xl h-64 skeleton animate-pulse"></div>
+  </div>
 </div>
 
 <script>
-// --- CONFIG & TRANSLATIONS ---
 const SUPABASE_URL = 'https://wzjucotepgqhcmgidgda.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_1zE-aPwB_AHU7hU_yaUI9Q_zWplLCSL';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -101,16 +116,21 @@ const ADMIN_PASSWORD = "123";
 
 let allProducts = [];
 let currentCategory = 'Semua';
-let editingId = null;
 let currentLang = 'ms';
 let isAdmin = false;
+let editingId = null;
 
 const i18n = {
-    ms: { search: "Cari barang racun...", catAll: "Semua", buy: "BELI SEKARANG", shop: "Lihat Store", sold: "Terjual", category: "Kategori", swipe: "SWIPE", noItems: "Tiada barang dijumpai..." },
-    en: { search: "Search viral items...", catAll: "All", buy: "BUY NOW", shop: "Visit Store", sold: "Sold", category: "Category", swipe: "SWIPE", noItems: "No items found..." }
+    ms: { search: "Cari barang racun...", catAll: "Semua", buy: "BELI SEKARANG", shop: "Lihat Store", sold: "Terjual", category: "Kategori", swipe: "SWIPE", noItems: "Tiada barang...", shareMsg: "Tengok barang ni kat Shopee Hub! Cun gila: " },
+    en: { search: "Search viral items...", catAll: "All", buy: "BUY NOW", shop: "Visit Store", sold: "Sold", category: "Category", swipe: "SWIPE", noItems: "No items...", shareMsg: "Check this out on Shopee Hub! So cool: " }
 };
 
-// --- APP FLOW ---
+// --- APP FLOW & DEEP LINK ---
+window.onload = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.has('id')) { enterApp('ms'); } // Auto enter if deep link
+};
+
 function enterApp(lang) {
     currentLang = lang;
     document.getElementById('landing-page').style.opacity = '0';
@@ -123,15 +143,11 @@ function enterApp(lang) {
 }
 
 function loginAdmin() {
-    const pass = document.getElementById('landing-admin-pass').value;
-    if (pass === ADMIN_PASSWORD) {
+    if (document.getElementById('landing-admin-pass').value === ADMIN_PASSWORD) {
         isAdmin = true;
         document.getElementById('admin-gear').classList.remove('hidden');
         enterApp('ms');
-        alert("Admin Mode Activated");
-    } else {
-        alert("Wrong Password");
-    }
+    } else { alert("Wrong Password"); }
 }
 
 function updateStaticLabels() {
@@ -139,20 +155,34 @@ function updateStaticLabels() {
     document.getElementById('lang-cat-title').innerText = i18n[currentLang].category;
 }
 
-// --- DATABASE LOGIC ---
+// --- CORE LOGIC ---
 async function loadProducts() {
   const { data, error } = await _supabase.from('products').select('*').order('id', { ascending: false });
-  if (!error) { allProducts = data; generateSidebarCategories(); filterProducts(); }
+  if (!error) { 
+      allProducts = data; 
+      generateSidebarCategories(); 
+      
+      // Handle Deep Link
+      const urlParams = new URLSearchParams(window.location.search);
+      const prodId = urlParams.get('id');
+      if(prodId) {
+          const found = allProducts.find(p => p.id == prodId);
+          if(found) { 
+              allProducts = [found]; 
+              document.getElementById('active-cat-label').innerText = "📍 Pilihan Khas";
+          }
+      }
+      filterProducts(); 
+  }
 }
 
 function filterProducts() {
   const term = document.getElementById('search-input').value.toLowerCase();
   const container = document.getElementById('product-list');
   const isPanelOpen = !document.getElementById('admin-panel').classList.contains('hidden');
-
   let filtered = allProducts.filter(p => p.name.toLowerCase().includes(term) && (currentCategory === 'Semua' || p.category === currentCategory));
+  
   container.innerHTML = '';
-
   if(filtered.length === 0) {
       container.innerHTML = `<p class="col-span-2 text-center text-gray-400 py-20 text-xs italic">${i18n[currentLang].noItems}</p>`;
       return;
@@ -162,15 +192,18 @@ function filterProducts() {
     const disc = p.original_price ? Math.round(((p.original_price - p.price) / p.original_price) * 100) : 0;
     const adminBtns = (isAdmin && isPanelOpen) ? `
       <div class="absolute top-2 right-2 flex gap-1 z-30">
-        <button onclick="prepareEdit(${p.id})" class="bg-blue-600 text-white w-7 h-7 rounded-full text-[10px] font-bold shadow-lg flex items-center justify-center">E</button>
-        <button onclick="deleteProduct(${p.id})" class="bg-red-600 text-white w-7 h-7 rounded-full text-[10px] font-bold shadow-lg flex items-center justify-center">X</button>
+        <button onclick="prepareEdit(${p.id})" class="bg-blue-600 text-white w-7 h-7 rounded-full text-[10px] font-bold">E</button>
+        <button onclick="deleteProduct(${p.id})" class="bg-red-600 text-white w-7 h-7 rounded-full text-[10px] font-bold">X</button>
       </div>` : '';
 
     const imgList = (p.images && p.images.length > 0) ? p.images : [p.image_url];
     container.innerHTML += `
       <div class="relative bg-white rounded-3xl border border-gray-100 shadow-sm flex flex-col overflow-hidden transition-all active:scale-95 italic text-left">
         ${adminBtns}
-        ${disc > 0 ? `<div class="absolute top-3 left-3 bg-red-500 text-white text-[9px] font-black px-2 py-1 rounded-lg z-20 animate-pulse">-${disc}%</div>` : ''}
+        <button onclick="shareProduct(${p.id}, '${p.name}')" class="absolute top-2 left-2 bg-white/80 backdrop-blur-md p-2 rounded-full z-30 shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 100-2.684 3 3 0 000 2.684zm0 9.474a3 3 0 110-2.684 3 3 0 010 2.684z" /></svg>
+        </button>
+        ${disc > 0 ? `<div class="absolute top-12 left-2 bg-red-500 text-white text-[9px] font-black px-2 py-1 rounded-lg z-20">-${disc}%</div>` : ''}
         <div class="relative w-full h-44 overflow-hidden">
             <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar w-full h-full bg-gray-50">
                 ${imgList.map(img => `<img src="${img}" class="w-full h-44 object-cover flex-shrink-0 snap-center" onerror="this.src='https://via.placeholder.com/300'">`).join('')}
@@ -180,8 +213,8 @@ function filterProducts() {
         <div class="p-4 flex flex-col flex-grow">
           <h2 class="text-[12px] font-bold text-gray-800 line-clamp-2 mb-1 h-8 font-sans not-italic leading-tight">${p.name}</h2>
           <div class="flex items-center gap-1 mb-2 font-sans not-italic text-[9px] font-bold text-gray-400">⭐ ${p.rating}.0 | ${i18n[currentLang].sold} ${p.sold_count}</div>
-          <div class="mb-3 font-sans not-italic">${p.original_price ? `<p class="text-[10px] text-gray-400 line-through decoration-red-300 italic">RM${p.original_price.toFixed(2)}</p>` : ''}<p class="text-orange-600 font-black text-lg italic leading-tight">RM${p.price.toFixed(2)}</p></div>
-          ${p.review_text ? `<div class="bg-orange-50 p-2.5 rounded-2xl mb-4 border border-orange-100 text-[9px] text-orange-800 italic font-medium font-sans leading-tight">" ${p.review_text} "</div>` : ''}
+          <div class="mb-3 font-sans not-italic">${p.original_price ? `<p class="text-[10px] text-gray-400 line-through italic">RM${p.original_price.toFixed(2)}</p>` : ''}<p class="text-orange-600 font-black text-lg italic leading-tight">RM${p.price.toFixed(2)}</p></div>
+          ${p.review_text ? `<div class="bg-orange-50 p-2.5 rounded-2xl mb-4 border border-orange-100 text-[9px] text-orange-800 italic font-medium font-sans">" ${p.review_text} "</div>` : ''}
           <div class="space-y-2 mt-auto">
             <a href="${p.affiliate_url}" target="_blank" class="block w-full shopee-gradient text-white text-[10px] font-black py-3 rounded-xl text-center uppercase shadow-md not-italic font-sans">${i18n[currentLang].buy}</a>
             ${p.shop_url ? `<a href="${p.shop_url}" target="_blank" class="block w-full bg-gray-100 text-gray-500 text-[10px] font-bold py-2 rounded-xl text-center uppercase not-italic font-sans">${i18n[currentLang].shop}</a>` : ''}
@@ -191,21 +224,32 @@ function filterProducts() {
   });
 }
 
-// --- ADMIN LOGIC ---
-function toggleAdminPanel() {
-    const p = document.getElementById('admin-panel');
-    p.classList.toggle('hidden');
-    if(p.classList.contains('hidden')) resetAdminForm();
-    filterProducts();
+function shareProduct(id, name) {
+    const shareUrl = `${window.location.origin}${window.location.pathname}?id=${id}`;
+    const text = `${i18n[currentLang].shareMsg}${name}\n\nKlik: ${shareUrl}`;
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
 }
+
+// --- ADMIN & OTHERS ---
+function toggleAdminPanel() { document.getElementById('admin-panel').classList.toggle('hidden'); filterProducts(); }
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('sidebar-hidden'); document.getElementById('sidebar-overlay').classList.toggle('hidden'); }
+function generateSidebarCategories() {
+  const list = document.getElementById('category-list');
+  const cats = [i18n[currentLang].catAll, ...new Set(allProducts.map(p => p.category).filter(c => c))];
+  list.innerHTML = '';
+  cats.forEach(c => {
+    const active = currentCategory === c;
+    list.innerHTML += `<button onclick="setCategory('${c}')" class="text-left py-3.5 px-5 rounded-2xl text-[11px] font-bold ${active ? 'bg-orange-600 text-white shadow-lg' : 'bg-gray-50 text-gray-500'} uppercase">${c}</button>`;
+  });
+}
+function setCategory(c) { currentCategory = c; toggleSidebar(); filterProducts(); }
+async function deleteProduct(id) { if(confirm("Padam?")) { await _supabase.from('products').delete().eq('id', id); loadProducts(); } }
 
 function prepareEdit(id) {
     const p = allProducts.find(item => item.id === id);
     if(!p) return;
     editingId = id;
     document.getElementById('admin-title').innerText = "Edit Produk";
-    document.getElementById('btn-save').innerText = "Update Produk";
-    document.getElementById('btn-cancel').classList.remove('hidden');
     document.getElementById('p-name').value = p.name;
     document.getElementById('p-price').value = p.price;
     document.getElementById('p-original-price').value = p.original_price || '';
@@ -218,21 +262,12 @@ function prepareEdit(id) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function resetAdminForm() {
-    editingId = null;
-    document.getElementById('admin-title').innerText = "Tambah Produk";
-    document.getElementById('btn-save').innerText = "Publish Barang";
-    document.getElementById('btn-cancel').classList.add('hidden');
-    ['p-name','p-price','p-original-price','p-sold','p-category','p-review','p-link','p-shop-link','p-image-file'].forEach(id => document.getElementById(id).value = "");
-}
-
 async function saveProduct() {
   const btn = document.getElementById('btn-save');
-  const fileInput = document.getElementById('p-image-file');
-  btn.innerText = "⏳ Processing...";
+  btn.innerText = "⏳ Saving...";
   btn.disabled = true;
-
   try {
+    const fileInput = document.getElementById('p-image-file');
     let finalImageUrl = "", finalImagesArray = [];
     if (fileInput.files.length > 0) {
       for (const file of Array.from(fileInput.files)) {
@@ -261,37 +296,9 @@ async function saveProduct() {
     };
 
     if (editingId) { await _supabase.from('products').update(payload).eq('id', editingId); }
-    else { if (!finalImageUrl) throw new Error("Need Image!"); await _supabase.from('products').insert([payload]); }
-    
-    resetAdminForm(); loadProducts(); toggleAdminPanel();
+    else { await _supabase.from('products').insert([payload]); }
+    location.reload();
   } catch (err) { alert(err.message); }
-  finally { btn.innerText = "Publish Barang"; btn.disabled = false; }
-}
-
-async function deleteProduct(id) {
-  if (confirm("Padam?")) { await _supabase.from('products').delete().eq('id', id); loadProducts(); }
-}
-
-// --- SIDEBAR LOGIC ---
-function toggleSidebar() {
-  const s = document.getElementById('sidebar'), o = document.getElementById('sidebar-overlay');
-  s.classList.toggle('sidebar-hidden'); s.classList.toggle('sidebar-visible'); o.classList.toggle('hidden');
-}
-
-function generateSidebarCategories() {
-  const list = document.getElementById('category-list');
-  const cats = [i18n[currentLang].catAll, ...new Set(allProducts.map(p => p.category).filter(c => c))];
-  list.innerHTML = '';
-  cats.forEach(c => {
-    const active = currentCategory === c;
-    list.innerHTML += `<button onclick="setCategory('${c}')" class="text-left py-3.5 px-5 rounded-2xl text-xs font-bold ${active ? 'bg-orange-600 text-white shadow-lg' : 'bg-gray-50 text-gray-500'} uppercase">${c}</button>`;
-  });
-}
-
-function setCategory(c) {
-  currentCategory = c;
-  document.getElementById('active-cat-label').innerText = i18n[currentLang].category + ": " + c;
-  toggleSidebar(); filterProducts(); generateSidebarCategories();
 }
 </script>
 </body>
